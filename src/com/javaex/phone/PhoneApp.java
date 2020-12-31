@@ -8,7 +8,7 @@ public class PhoneApp {
 	public static void main(String[] args) {
 		boolean power = true;
 		int menu, num;
-		String name, hp, company;
+		String name, hp, company, search;
 		Scanner sc = new Scanner(System.in);
 		PhoneDao phoneDao = new PhoneDao();
 		List<PhoneVo> hpList;
@@ -89,13 +89,25 @@ public class PhoneApp {
 					sc.nextLine();
 					
 					System.out.print("검색어> ");
-					name = sc.nextLine();
+					search = sc.nextLine();
 					
+					hpList = phoneDao.getSearch(search);
+					for(int i=0; i<hpList.size(); i++) {
+						hpList.get(i).listInfo();
+					}
 					
-					//hpList = phoneDao.getSearch(name, hp, company);
+					break;
+					
+				case 6:
+					System.out.println("************************");
+					System.out.println("*****    감사합니다    *****");
+					System.out.println("************************");
+
+					
+					power = false;
 			}
 		}
-		
+		sc.close();
 	}
 
 }

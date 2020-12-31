@@ -228,16 +228,12 @@ public class PhoneDao {
 	}
 	
 	//**********검색************
-	public List<PhoneVo> getSearch(String name, String hp, String company){
+	public List<PhoneVo> getSearch(String search){
 		List<PhoneVo> serch = new ArrayList<PhoneVo>();
 		
 		getconnection();
 
 		try {
-		    // 1. JDBC 드라이버 (Oracle) 로딩
-
-		    // 2. Connection 얻어오기
-
 		    // 3. SQL문 준비 / 바인딩 / 실행
 		    /*select  name,
         			  hp,
@@ -248,9 +244,10 @@ public class PhoneDao {
 			  or company like '%123%';
 		     */
 			String query = "";
-			query += "select name, \n";
+			query += "select phone_id, \n";
+			query += "	 name, \n";
 			query += "	 hp, \n";
-			query += "	 company, \n";
+			query += "	 company \n";
 			query += " from person \n";
 			query += " where name like ? \n";
 			query += " or hp like ? \n";
@@ -261,19 +258,20 @@ public class PhoneDao {
 			
 			//쿼리문 만들기
 			pstmt = conn.prepareStatement(query);
-			pstmt.setString(1, "%" + name + "%");
-			pstmt.setString(2, "%" + hp + "%");
-			pstmt.setString(3, "%" + company + "%");
+			pstmt.setString(1, "%" + search + "%");
+			pstmt.setString(2, "%" + search + "%");
+			pstmt.setString(3, "%" + search + "%");
 			
 			rs = pstmt.executeQuery();
 			
 		    // 4.결과처리
 			while(rs.next()) {
+				int bookId = rs.getInt("phone_id");
 				String userName = rs.getString("name");
 				String userHp = rs.getString("hp");
 				String userCompany = rs.getString("company");
 				
-				PhoneVo phoneVo = new PhoneVo(name, hp, company);
+				PhoneVo phoneVo = new PhoneVo(bookId, userName, userHp, userCompany);
 				serch.add(phoneVo);
 			}
 
