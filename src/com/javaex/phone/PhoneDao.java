@@ -105,7 +105,7 @@ public class PhoneDao {
 
 	// ********등록**********
 	public int phoneInsert(String name, String hp, String company) {
-		
+
 		getconnection();
 
 		try {
@@ -124,7 +124,7 @@ public class PhoneDao {
 			pstmt.setString(1, name);
 			pstmt.setString(2, hp);
 			pstmt.setString(3, company);
-			
+
 			System.out.println(query);
 
 			count = pstmt.executeUpdate();
@@ -141,108 +141,101 @@ public class PhoneDao {
 		return count;
 
 	}
+
 	// **********수정**********
-		public int getUpdate(int num, String name, String hp, String company) {
+	public int getUpdate(int num, String name, String hp, String company) {
 
-			getconnection();
+		getconnection();
 
-			try {
-			    // 3. SQL문 준비 / 바인딩 / 실행
-				/*
-				 *  update person
-					set hp = ?,
-	    			company = ?
-					where phone_id = ?;
-				 */
-			    String query = "";
-			    query += "update person \n";
-			    query += "set 	 name = ?, \n";
-			    query += "		 hp = ?, \n";
-			    query += "		 company = ? \n";
-			    query += "		 where phone_id = ?";
-			    
-			    //쿼리문 테스트
-			    //System.out.println(query);
-			    
-			    //쿼리문 만들기
-			    pstmt = conn.prepareStatement(query);
-			    pstmt.setString(1, name);
-			    pstmt.setString(2, hp);
-			    pstmt.setString(3, company);
-			    pstmt.setInt(4, num);
-			    
-			    count = pstmt.executeUpdate();
-			    
-			    // 4.결과처리
-			    System.out.println(count + "건 수정되었습니다.");
+		try {
+			// 3. SQL문 준비 / 바인딩 / 실행
+			/*
+			 * update person set hp = ?, company = ? where phone_id = ?;
+			 */
+			String query = "";
+			query += "update person \n";
+			query += "set 	 name = ?, \n";
+			query += "		 hp = ?, \n";
+			query += "		 company = ? \n";
+			query += "		 where phone_id = ?";
 
-			} catch (SQLException e) {
-			    System.out.println("error:" + e);
-			}
-			
-			close();
-			
-			return count;
+			// 쿼리문 테스트
+			// System.out.println(query);
+
+			// 쿼리문 만들기
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, name);
+			pstmt.setString(2, hp);
+			pstmt.setString(3, company);
+			pstmt.setInt(4, num);
+
+			count = pstmt.executeUpdate();
+
+			// 4.결과처리
+			System.out.println(count + "건 수정되었습니다.");
+
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
 		}
 
-	//*********삭제**************
+		close();
+
+		return count;
+	}
+
+	// *********삭제**************
 	public int getDelete(int num) {
 
 		getconnection();
 
-
 		try {
-		    // 3. SQL문 준비 / 바인딩 / 실행
-		    String query = "";
-		    query += "delete person \n";
-		    query += "where phone_id = ?";
-		    
-		    //System.out.println(query);
-		    
-		    pstmt = conn.prepareStatement(query);
-		    pstmt.setInt(1, num);
-		    
-		    count = pstmt.executeUpdate();
-		    
-		    // 4.결과처리
-		    System.out.println(count + "건 삭제 되었습니다.");
+			// 3. SQL문 준비 / 바인딩 / 실행
+			String query = "";
+			query += "delete person \n";
+			query += "where phone_id = ?";
+
+			// System.out.println(query);
+
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, num);
+
+			count = pstmt.executeUpdate();
+
+			// 4.결과처리
+			System.out.println(count + "건 삭제 되었습니다.");
 		} catch (SQLException e) {
-		    System.out.println("error:" + e);
+			System.out.println("error:" + e);
 		} finally {
-		   
-		    // 5. 자원정리
-		    try {           
-		        if (pstmt != null) {
-		            pstmt.close();
-		        }
-		        if (conn != null) {
-		            conn.close();
-		        }
-		    } catch (SQLException e) {
-		        System.out.println("error:" + e);
-		    }
+
+			// 5. 자원정리
+			try {
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("error:" + e);
+			}
 
 		}
-		
+
 		return count;
 	}
-	
-	//**********검색************
-	public List<PhoneVo> getSearch(String search){
+
+	// **********검색************
+	public List<PhoneVo> getSearch(String search) {
 		List<PhoneVo> serch = new ArrayList<PhoneVo>();
-		
+
 		getconnection();
 
 		try {
-		    // 3. SQL문 준비 / 바인딩 / 실행
-		    /*select  name,
-        			  hp,
-        			  company
-			  from person
-			  where name like '%유%'
-			  or hp like '%3%'
-			  or company like '%123%';
-		     */
+			// 3. SQL문 준비 / 바인딩 / 실행
+			/*
+			 * select name, hp, company from person where name like '%유%' or hp like '%3%'
+			 * or company like '%123%';
+			 */
 			String query = "";
 			query += "select phone_id, \n";
 			query += "	 name, \n";
@@ -252,38 +245,36 @@ public class PhoneDao {
 			query += " where name like ? \n";
 			query += " or hp like ? \n";
 			query += " or company like ?";
-			
-			//쿼리문 확인
-			System.out.println(query);
-			
-			//쿼리문 만들기
+
+			// 쿼리문 확인
+			// System.out.println(query);
+
+			// 쿼리문 만들기
 			pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, "%" + search + "%");
 			pstmt.setString(2, "%" + search + "%");
 			pstmt.setString(3, "%" + search + "%");
-			
+
 			rs = pstmt.executeQuery();
-			
-		    // 4.결과처리
-			while(rs.next()) {
+
+			// 4.결과처리
+			while (rs.next()) {
 				int bookId = rs.getInt("phone_id");
 				String userName = rs.getString("name");
 				String userHp = rs.getString("hp");
 				String userCompany = rs.getString("company");
-				
+
 				PhoneVo phoneVo = new PhoneVo(bookId, userName, userHp, userCompany);
 				serch.add(phoneVo);
 			}
 
 		} catch (SQLException e) {
-		    System.out.println("error:" + e);
-		} 
-		
+			System.out.println("error:" + e);
+		}
+
 		close();
-		
-		
+
 		return serch;
 	}
 
-	
 }
